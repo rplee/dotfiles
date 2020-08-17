@@ -90,11 +90,15 @@ fi
 
 unset use_color safe_term match_lhs sh
 
-alias cp="cp -i"                          # confirm before overwriting something
 alias df='df -h'                          # human-readable sizes
 alias free='free -m'                      # show sizes in MB
 alias np='nano -w PKGBUILD'
 alias more=less
+
+# aliases to protect from overwriting
+alias cp='cp -i'
+alias mv='mv -i'
+
 
 xhost +local:root > /dev/null 2>&1
 
@@ -138,5 +142,34 @@ ex ()
   fi
 }
 
+# Make a directory then cd into it
+mcd () {
+    mkdir -p "$1"
+    cd "$1"
+}
+
+# Jump to directory containing file
+jump() {
+    cd "$(dirname ${1})"
+}
+
+# Execute a command in a specific directory
+xin() {
+    (
+        cd "${1}" && shift && "${@}"
+    )
+}
+
+# Update dotfiles
+dfu() {
+    (
+        cd ~/.dotfiles && git pull --ff-only && ./install -q
+    )
+}
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --no-ignore-vcs'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+
