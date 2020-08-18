@@ -99,7 +99,6 @@ alias more=less
 alias cp='cp -i'
 alias mv='mv -i'
 
-
 xhost +local:root > /dev/null 2>&1
 
 complete -cf sudo
@@ -120,7 +119,7 @@ shopt -s histappend
 #
 # # ex - archive extractor
 # # usage: ex <file>
-ex ()
+ex()
 {
   if [ -f $1 ] ; then
     case $1 in
@@ -143,9 +142,8 @@ ex ()
 }
 
 # Make a directory then cd into it
-mcd () {
-    mkdir -p "$1"
-    cd "$1"
+mcd() {
+    mkdir -p "$1" && cd "$1"
 }
 
 # Jump to directory containing file
@@ -153,17 +151,43 @@ jump() {
     cd "$(dirname ${1})"
 }
 
-# Execute a command in a specific directory
-xin() {
-    (
-        cd "${1}" && shift && "${@}"
-    )
-}
+# Print the number of files in a directory
+countfiles() { 
+    N="$(ls $1 | wc -l)"; 
+    if [[ "$1" == " " || -z "$1" ]]; then 
+            echo "$N files in the current directory";
+        else
+	    echo "$N files in $1";
+        fi
+    }
 
-# Update dotfiles
+# Update dotfiles from Github repository
 dfu() {
     (
         cd ~/.dotfiles && git pull --ff-only && ./install -q
+    )
+}
+
+# Get the min, max, median, and sum of a single column of numeric data
+mmmm() {
+    (
+	cat $1 | sort -n | awk '
+
+	  $1 ~ /^(\-)?[0-9]*(\.[0-9]*)?$/ {
+	    a[c++] = $1;
+	    sum += $1;
+	  }
+	  END {
+	    ave = sum / c;
+	    if( (c % 2) == 1 ) {
+	      median = a[ int(c/2) ];
+	    } else {
+	      median = ( a[c/2] + a[c/2-1] ) / 2;
+	    }
+
+	    {printf "Average: %.2f\tMedian: %d\tMin: %d\tMax: %d\n", ave, median, a[0], a[c-1]}
+	  }
+	'
     )
 }
 
@@ -171,5 +195,4 @@ dfu() {
 
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --no-ignore-vcs'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-
 
