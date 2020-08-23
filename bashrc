@@ -161,6 +161,13 @@ countfiles() {
         fi
     }
 
+# Update dotfiles from Github repository
+dfu() {
+    (
+        cd ~/.dotfiles && git pull --ff-only && ./install -q
+    )
+}
+
 # Get the min, max, median, and sum of a single column of numeric data
 mmmm() {
     (
