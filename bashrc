@@ -4,6 +4,10 @@
 
 [[ $- != *i* ]] && return
 
+[ -z "$PS1" ] && return # guard against non-interactive logins
+
+export TERM="screen-256color"
+
 colors() {
 	local fgc bgc vals seq0
 
@@ -90,14 +94,20 @@ fi
 
 unset use_color safe_term match_lhs sh
 
-alias df='df -h'                          # human-readable sizes
-alias free='free -m'                      # show sizes in MB
+#ALIASES
+alias tmux="tmux -2" 		# force tmux to assume that the terminal supports 256 colors
+alias killz='killall -9' 	# kills all programs with the given program name	
+alias df='df -h'                # human-readable sizes
+alias free='free -m'            # show sizes in MB
 alias np='nano -w PKGBUILD'
 alias more=less
+alias hidden='ls -d .*'		# displays only hidden files
+alias shell='ps -p $$ -o comm='	# displays the name of the shell being used
 
 # aliases to protect from overwriting
 alias cp='cp -i'
 alias mv='mv -i'
+alias rm='rm -iv' #prompt before every removal, then explain what is being done
 
 xhost +local:root > /dev/null 2>&1
 
@@ -113,10 +123,19 @@ shopt -s expand_aliases
 
 # export QT_SELECT=4
 
+# Make .bash_history store more and not store duplicates
+export HISTCONTROL=ignoreboth
+export HISTSIZE=250000
+export HISTFILESIZE=250000
+
 # Enable history appending instead of overwriting.  #139609
 shopt -s histappend
 
-#
+# Turn off the ability for other people to message your terminal using wall
+mesg n
+
+# FUNCTIONS
+
 # # ex - archive extractor
 # # usage: ex <file>
 ex()
@@ -194,5 +213,3 @@ mmmm() {
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --no-ignore-vcs'
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-

@@ -1,3 +1,8 @@
+" Force 256 colors
+if !has('gui_running')
+	set t_Co=256
+endif
+
 " Turn on syntax highlighting.
 syntax on
 
@@ -72,25 +77,41 @@ endif
 " Add vim-plug plugins
 call plug#begin('~/.vim/plugged')
 
-" Add plugin for git
-Plug 'tpope/vim-fugitive'
+" Use the vim-one color scheme
+Plug 'rakr/vim-one'
+Plug 'liuchengxu/space-vim-dark'
 
 " Add status line
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
+" Better navigation of directory
+Plug 'scrooloose/nerdtree'
+
+" Improve syntax highlighting for languages
+Plug 'sheerun/vim-polyglot'
+
+" Add plugin for git
+Plug 'tpope/vim-fugitive'
+
+" Easy quoting and parenthesizing
+Plug 'tpope/vim-surround'
+
+" Repeat non-native commands used by supported plugins such as vim-surround
+Plug 'tpope/vim-repeat'
+
+" Easy commenting/uncommenting
+Plug 'tpope/vim-commentary'
+
 " Integrate fzf with vim
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
-" Navigate and manipulate files in a tree view
-Plug 'scrooloose/nerdtree'
+" Improved visual mode searching
+Plug 'bronson/vim-visual-star-search'
 
-" Use the vim-one color scheme
-Plug 'rakr/vim-one'
-
-" Improve syntax highlighting for languages
-Plug 'sheerun/vim-polyglot'
+" Easy motions
+Plug 'easymotion/vim-easymotion'
 
 call plug#end()
 
@@ -98,7 +119,7 @@ call plug#end()
 colorscheme one
 set background=dark
 
-" Set airline color scheme
+" Set status line color scheme
 let g:airline_theme='onedark'
 
 " Automatically display all buffers when there's only one tab open
