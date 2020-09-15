@@ -3,22 +3,25 @@ if !has('gui_running')
 	set t_Co=256
 endif
 
-" Turn on syntax highlighting.
+" Turn on syntax highlighting
 syntax on
 
-" New lines inherit the indentation of previous lines.
+" Use an encoding that supports utf-8 
+set encoding=utf-8
+
+" New lines inherit the indentation of previous lines
 set autoindent
 
-" The backspace key has slightly unintuitive behavior by default. For example,
-" by default, you can't backspace before the insertion point set with 'i'.
-" This configuration makes backspace behave more reasonably, in that you can
-" backspace over anything.
+" Set tabs to be 4 spaces
+""set shiftwidth=4 softtabstop=4 expandtab
+
+" Backspace over anything
 set backspace=indent,eol,start
 
-" Ignore included files in tab completion.
+" Ignore included files in tab completion
 set complete-=i
 
-" Enable hidden buffers.
+" Enable hidden buffers
 set hidden
 
 " Include more history
@@ -37,19 +40,13 @@ set incsearch
 " Always show the status line at the bottom, even if you only have one window open.
 set laststatus=2
 
-" Vim is based on Vi. Setting `nocompatible` switches from the default
-" Vi-compatibility mode and enables useful Vim functionality. This
-" configuration option turns out not to be necessary for the file named
-" '~/.vimrc', because Vim automatically enters nocompatible mode if that file
-" is present. But it's included here just in case this config file is
-" loaded some other way (e.g. saved as `foo`, and then Vim started with
-" `vim -u foo`).
-set nocompatible
+" This option is already set when processing a .vimrc
+""set nocompatible
 
 " Disable audible bell
 set noerrorbells visualbell t_vb=
 
-" Do not show mode (lightline plugin already shows mode)
+" Do not show mode
 set noshowmode
 
 " Show line numbers. Enable relative line numbering mode.
@@ -63,6 +60,7 @@ set shortmess+=I
 
 "Enhance command line completion
 set wildmenu
+set wildmode=list:longest,full
 
 " Unbind some useless default key bindings. 'Q' in normal mode enters Ex mode.
 nmap Q <Nop> 
@@ -77,9 +75,8 @@ endif
 " Add vim-plug plugins
 call plug#begin('~/.vim/plugged')
 
-" Use the vim-one color scheme
-Plug 'rakr/vim-one'
-Plug 'liuchengxu/space-vim-dark'
+" Use the awesome vim color schemes
+Plug 'joshdick/onedark.vim'
 
 " Add status line
 Plug 'vim-airline/vim-airline'
@@ -116,8 +113,7 @@ Plug 'easymotion/vim-easymotion'
 call plug#end()
 
 " Set color scheme
-colorscheme one
-set background=dark
+colorscheme onedark
 
 " Set status line color scheme
 let g:airline_theme='onedark'
@@ -125,6 +121,6 @@ let g:airline_theme='onedark'
 " Automatically display all buffers when there's only one tab open
 let g:airline#extensions#tabline#enabled = 1
 
-" Nerdtree configuration
+" Nerdtree configuration (<Leader> is \ by default)
 nnoremap <Leader>n :NERDTreeToggle<CR>
 nnoremap <Leader>f :NERDTreeFind<CR>
