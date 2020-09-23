@@ -6,7 +6,7 @@ endif
 " Turn on syntax highlighting
 syntax on
 
-" Use an encoding that supports utf-8 
+" Use an encoding that supports utf-8
 set encoding=utf-8
 
 " New lines inherit the indentation of previous lines
@@ -63,7 +63,14 @@ set wildmenu
 set wildmode=list:longest,full
 
 " Unbind some useless default key bindings. 'Q' in normal mode enters Ex mode.
-nmap Q <Nop> 
+nmap Q <Nop>
+
+"Enable loading the plugin files for specific file types
+filetype plugin on
+
+"Enhances the % command to jump between HTML tags, if/else/endif in Vim
+"scripts, and more
+runtime macros/matchit.vim
 
 " Automatically install vim-plug if it is not already installed
 if empty(glob('~/.vim/autoload/plug.vim'))
@@ -82,30 +89,43 @@ Plug 'joshdick/onedark.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
-" Better navigation of directory
+" Better navigation of directories
 Plug 'scrooloose/nerdtree'
 
-" Improve syntax highlighting for languages
+" Improve syntax highlighting for many languages
 Plug 'sheerun/vim-polyglot'
 
-" Add plugin for git
+" Better display of unwanted whitespace
+Plug 'ntpeters/vim-better-whitespace'
+
+" Git wrapper so awesome, it should be illegal
 Plug 'tpope/vim-fugitive'
 
-" Easy quoting and parenthesizing
+" Surround text with quotes, parenthesis, brackets, and more.
 Plug 'tpope/vim-surround'
+
+" Pairs of handy bracket mappings, such as for navigating buffers, scrolling
+" through the argument, quickfix, location, and tag lists, and more.
+Plug 'tpope/vim-unimpaired'
 
 " Repeat non-native commands used by supported plugins such as vim-surround
 Plug 'tpope/vim-repeat'
 
-" Easy commenting/uncommenting
+" Toggle comments in various ways
 Plug 'tpope/vim-commentary'
 
 " Integrate fzf with vim
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
-" Improved visual mode searching
-Plug 'bronson/vim-visual-star-search'
+" Modify * to also work with visual selection
+Plug 'nelstrom/vim-visual-star-search'
+
+" Automatically clear search highlights after you move your cursor
+Plug 'haya14busa/is.vim'
+
+" Handle multi-file find and replace
+Plug 'mhinz/vim-grepper'
 
 " Easy motions
 Plug 'easymotion/vim-easymotion'
@@ -124,3 +144,8 @@ let g:airline#extensions#tabline#enabled = 1
 " Nerdtree configuration (<Leader> is \ by default)
 nnoremap <Leader>n :NERDTreeToggle<CR>
 nnoremap <Leader>f :NERDTreeFind<CR>
+
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --hidden --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
+  \   fzf#vim#with_preview(), <bang>0)
