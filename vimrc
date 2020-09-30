@@ -13,7 +13,7 @@ set encoding=utf-8
 set autoindent
 
 " Set tabs to be 4 spaces
-""set shiftwidth=4 softtabstop=4 expandtab
+set shiftwidth=4 softtabstop=4 expandtab
 
 " Backspace over anything
 set backspace=indent,eol,start
@@ -64,6 +64,11 @@ set wildmode=list:longest,full
 
 " Unbind some useless default key bindings. 'Q' in normal mode enters Ex mode.
 nmap Q <Nop>
+
+" Type a replacement term and press . to repeat the replacement again. Useful
+" for replacing a few instances of the term (comparable to multiple cursors)
+nnoremap <silent> s* :let @/='\<'.expand('<cword>').'\>'<CR>cgn
+xnoremap <silent> s* "sy:let @/=@s<CR>cgn
 
 "Enable loading the plugin files for specific file types
 filetype plugin on
