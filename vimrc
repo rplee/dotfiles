@@ -3,6 +3,7 @@ if !has('gui_running')
 	set t_Co=256
 endif
 
+" SETTINGS
 " Turn on syntax highlighting
 syntax on
 
@@ -40,6 +41,9 @@ set incsearch
 " Always show the status line at the bottom, even if you only have one window open.
 set laststatus=2
 
+" Enable mouse support
+set mouse+=a
+
 " This option is already set when processing a .vimrc
 ""set nocompatible
 
@@ -52,9 +56,6 @@ set noshowmode
 " Show line numbers. Enable relative line numbering mode.
 set number relativenumber
 
-" Enable mouse support
-set mouse+=a
-
 " Disable the default Vim startup message.
 set shortmess+=I
 
@@ -62,19 +63,35 @@ set shortmess+=I
 set wildmenu
 set wildmode=list:longest,full
 
+" MAPPINGS
 " Unbind some useless default key bindings. 'Q' in normal mode enters Ex mode.
 nmap Q <Nop>
+
+" Allow FZF.vim to select or deselect all search results using Alt-a and ALt-d
+execute "set <M-a>=\ea"
+noremap <M-a> <Esc>a
+"execute set <A-d>=\ed"
+"tnoremap <A-d> <Esc>d
+
+" Press * to search for the term under the cursor or a visual selection and
+" then press a key below to replace all instances of it in the current file.
+nnoremap <Leader>r :%s///g<Left><Left>
+nnoremap <Leader>rc :%s///gc<Left><Left><Left>
 
 " Type a replacement term and press . to repeat the replacement again. Useful
 " for replacing a few instances of the term (comparable to multiple cursors)
 nnoremap <silent> s* :let @/='\<'.expand('<cword>').'\>'<CR>cgn
 xnoremap <silent> s* "sy:let @/=@s<CR>cgn
 
-"Enable loading the plugin files for specific file types
+" Source Vim config file
+map <Leader>sv :source $MYVIMRC<CR>
+
+" PLUGINS
+" Enable loading the plugin files for specific file types
 filetype plugin on
 
-"Enhances the % command to jump between HTML tags, if/else/endif in Vim
-"scripts, and more
+" Enhances the % command to jump between HTML tags, if/else/endif in Vim
+" scripts, and more
 runtime macros/matchit.vim
 
 " Automatically install vim-plug if it is not already installed
@@ -119,6 +136,9 @@ Plug 'tpope/vim-repeat'
 " Toggle comments in various ways
 Plug 'tpope/vim-commentary'
 
+" Work with several variant of a word at once and change cases easily
+Plug 'tpope/vim-abolish'
+
 " Integrate fzf with vim
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -129,14 +149,12 @@ Plug 'nelstrom/vim-visual-star-search'
 " Automatically clear search highlights after you move your cursor
 Plug 'haya14busa/is.vim'
 
-" Handle multi-file find and replace
-Plug 'mhinz/vim-grepper'
-
-" Easy motions
+" Easier navigation
 Plug 'easymotion/vim-easymotion'
 
 call plug#end()
 
+" PLUGIN CONFIGURATIONS
 " Set color scheme
 colorscheme onedark
 
@@ -150,7 +168,8 @@ let g:airline#extensions#tabline#enabled = 1
 nnoremap <Leader>n :NERDTreeToggle<CR>
 nnoremap <Leader>f :NERDTreeFind<CR>
 
+" Enable FZF to search for strings within hidden files
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
-  \   'rg --hidden --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
+  \   'rg --hidden --column --line-number --no-heading --color=always --smart-case '.(<q-args>), 1,
   \   fzf#vim#with_preview(), <bang>0)
