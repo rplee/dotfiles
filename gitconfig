@@ -136,6 +136,7 @@
 
 	# Detect copies as well as renames.
 	renames = copies
+	tool = vimdiff
 
 [diff "bin"]
 
@@ -148,9 +149,11 @@
 	autocorrect = 1
 
 [merge]
-
+        defaultToUpstream = true
+	tool = vimdiff
 	# Include summaries of merged commits in newly created merge commit messages
 	log = true
+	conflictstyle = diff3
 
 [push]
 
@@ -188,3 +191,6 @@
 
 [user]
 	useConfigOnly = true
+
+[mergetool]
+	prompt = false
