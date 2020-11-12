@@ -3,8 +3,17 @@
 	# View abbreviated SHA, description, and history graph of the latest 20 commits.
 	l = log --pretty=oneline -n 20 --graph --abbrev-commit
 
+	# View abbreviated SHA, description, and history graph of all commits.
+	graph = log --all --graph --decorate --oneline
+
 	# View the current working tree status using the short format.
-	s = status -s
+        s = status -s
+
+        # View last commit
+        last = log -1 HEAD
+
+        # Unstage any staged changes for a given file
+        unstage = reset HEAD --
 
 	# Show the diff between the latest commit and the current state.
 	d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
@@ -151,9 +160,9 @@
 [merge]
         defaultToUpstream = true
 	tool = vimdiff
+	conflictstyle = diff3
 	# Include summaries of merged commits in newly created merge commit messages
 	log = true
-	conflictstyle = diff3
 
 [push]
 
