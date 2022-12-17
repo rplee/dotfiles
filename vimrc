@@ -1,6 +1,14 @@
-" Force 256 colors
-if !has('gui_running')
-	set t_Co=256
+" VI compatible mode is disabled so that VIm things work
+set nocompatible
+
+" vim can autodetect this based on $TERM (e.g. 'xterm-256color')
+" but it can be set to force 256 colors
+" set t_Co=256
+if has('gui_running')
+    colorscheme onedark
+else
+    colorscheme default
+    set nocursorline " looks bad in this mode
 endif
 
 " SETTINGS
@@ -43,9 +51,6 @@ set laststatus=2
 
 " Enable mouse support
 set mouse+=a
-
-" This option is already set when processing a .vimrc
-""set nocompatible
 
 " Disable audible bell
 set noerrorbells visualbell t_vb=
@@ -98,13 +103,17 @@ runtime macros/matchit.vim
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-" Add vim-plug plugins
-call plug#begin('~/.vim/plugged')
+" Run PlugInstall if there are missing plugins
+autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \| PlugInstall --sync | source $MYVIMRC
+\| endif
 
-" Use the awesome vim color schemes
+" Add vim-plug plugins
+call plug#begin()
+
+" Use vim color scheme
 Plug 'joshdick/onedark.vim'
 
 " Add status line
