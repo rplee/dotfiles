@@ -4,10 +4,8 @@
     ~/.profile: profile
     ~/.bash_profile: bash_profile
     ~/.bashrc: bashrc
-    ~/.bash_logout: bash_logout
     ~/.gitconfig: gitconfig
     ~/.gitignore: gitignore
     ~/.tmux.conf: tmux.conf
     ~/.vimrc: vimrc
     ~/.zshrc: zshrc
-    ~/.xinitrc: xinitrc
